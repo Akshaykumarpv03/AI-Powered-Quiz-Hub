@@ -1,0 +1,55 @@
+# === PYTHON ===
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pkl
+*.pyc
+*.egg-info/
+*.sqlite3
+
+# === VIRTUAL ENV ===
+venv/
+env/
+
+# === ENVIRONMENT VARIABLES (VERY IMPORTANT) ===
+.env
+*.env
+
+# === DJANGO ===
+staticfiles/
+media/
+static/
+logs/
+*.log
+
+# === IDE / EDITORS ===
+.vscode/
+.idea/
+*.swp
+
+# === BYTECODE & BUILD ===
+build/
+dist/
+*.egg
+.eggs/
+pip-wheel-metadata/
+
+# === MAC / WINDOWS TRASH FILES ===
+.DS_Store
+Thumbs.db
+
+# === DOCKER ===
+docker-data/
+db_data/
+redis_data/
+
+# === COVERAGE / TESTS ===
+htmlcov/
+.coverage
+.coverage.*
+
+# === MIGRATIONS (Optional) ===
+# Uncomment if you don't want to push migrations
+# */migrations/*
+# !*/migrations/__init__.py
