@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row justify-content-center min-vh-100 align-items-center">
+    <div class="col-md-8 col-lg-6">
+        <div class="card shadow-lg border-0 rounded-4">
+            <div class="card-header bg-gradient text-white text-center py-4" style="background: linear-gradient(135deg, #667eea, #764ba2);">
+                <h2 class="mb-0">My Profile</h2>
+            </div>
+            <div class="card-body p-5 bg-white text-dark">
+                <div class="text-center mb-4">
+                    {% if user.avatar %}
+                        <img src="{{ user.avatar.url }}" class="rounded-circle" width="120" height="120">
+                    {% else %}
+                        <div class="bg-secondary rounded-circle d-inline-block" style="width:120px;height:120px;"></div>
+                    {% endif %}
+                    <h4 class="mt-3">{{ user.full_name|default:user.email }}</h4>
+                </div>
+
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Full Name</label>
+                        {{ form.full_name }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Avatar</label>
+                        {{ form.avatar }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Bio</label>
+                        {{ form.bio }}
+                    </div>
+                    <button type="submit" class="btn btn-lg w-100 text-white fw-bold"
+                            style="background: linear-gradient(135deg, #667eea, #764ba2);">
+                        Update Profile
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
