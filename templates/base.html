@@ -8,8 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; margin: 0; }
-        .avatar-sm { width: 40px; height: 40px; object-fit: cover; }
-        .dropdown-menu { background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); }
+        .avatar-sm { width: 40px; height: 40px; object-fit: cover; border: 2px solid white; }
         .navbar { box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
     </style>
 </head>
@@ -20,37 +19,25 @@
 
             <div class="d-flex align-items-center">
                 {% if user.is_authenticated %}
-                    <!-- Dropdown with Avatar -->
                     <div class="dropdown">
                         <a class="dropdown-toggle d-flex align-items-center text-white text-decoration-none" 
                            href="#" role="button" data-bs-toggle="dropdown">
                             {% if user.avatar %}
                                 <img src="{{ user.avatar.url }}" alt="Avatar" class="rounded-circle avatar-sm me-2">
                             {% else %}
-                                <div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center me-2" 
-                                     style="width:40px;height:40px;">
+                                <div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center me-2 avatar-sm">
                                     <i class="fas fa-user text-white"></i>
                                 </div>
                             {% endif %}
                             <span class="d-none d-md-inline">{{ user.full_name|default:user.email|truncatechars:15 }}</span>
                         </a>
-
-                        <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0">
-                            <li>
-                                <a class="dropdown-item fw-bold" href="{% url 'profile' %}">
-                                    Profile
-                                </a>
-                            </li>
+                        <ul class="dropdown-menu dropdown-menu-end shadow-lg">
+                            <li><a class="dropdown-item" href="{% url 'profile' %}">Profile</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li>
-                                <a class="dropdown-item text-danger" href="{% url 'logout' %}">
-                                    Logout
-                                </a>
-                            </li>
+                            <li><a class="dropdown-item text-danger" href="{% url 'logout' %}">Logout</a></li>
                         </ul>
                     </div>
                 {% else %}
-                    <!-- Not logged in -->
                     <a href="{% url 'login' %}" class="btn btn-outline-light me-2">Login</a>
                     <a href="{% url 'register' %}" class="btn btn-light">Register</a>
                 {% endif %}
@@ -67,7 +54,6 @@
                 </div>
             {% endfor %}
         {% endif %}
-
         {% block content %}{% endblock %}
     </div>
 
