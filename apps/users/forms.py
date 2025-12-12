@@ -1,47 +1,34 @@
+# apps/users/forms.py — FINAL
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from .models import User
+from .models import User, Role
 
 class CustomUserCreationForm(UserCreationForm):
-    email = forms.EmailField(required=True, widget=forms.EmailInput(attrs={'class': 'form-control form-control-lg'}))
+    full_name = forms.CharField(max_length=255, required=False)
 
     class Meta:
         model = User
-        fields = ("email", "password1", "password2")
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['password1'].widget.attrs.update({'class': 'form-control form-control-lg'})
-        self.fields['password2'].widget.attrs.update({'class': 'form-control form-control-lg'})
+        fields = ("email", "full_name", "password1", "password2")
 
     def save(self, commit=True):
         user = super().save(commit=False)
         user.email = self.cleaned_data["email"]
         user.username = self.cleaned_data["email"]
+        user.full_name = self.cleaned_data.get("full_name")
         if commit:
             user.save()
         return user
 
-
-class CustomUserCreationForm(UserCreationForm):
-    email = forms.EmailField(required=True)
-
-    class Meta:
-        model = User
-        fields = ("email", "password1", "password2")
-
-    def save(self, commit=True):
-        user = super().save(commit=False)
-        user.email = self.cleaned_data["email"]
-        user.username = self.cleaned_data["email"]
-        if commit:
-            user.save()
-        return user
 
 class ProfileUpdateForm(forms.ModelForm):
+    avatar = forms.ImageField(required=False, widget=forms.FileInput(attrs={'accept': 'image/*'}))
+    avatar_clear = forms.BooleanField(required=False, widget=forms.HiddenInput)
+
     class Meta:
         model = User
-        fields = ['full_name', 'avatar', 'bio']
-        widgets = {
-            'bio': forms.Textarea(attrs={'rows': 4}),
-        }
+        fields = ['full_name', 'avatar', 'bio', 'role']
+
+    def clean_avatar(self):
+        if self.cleaned_data.get('avatar_clear'):
+            return None
+        return self.cleaned_data.get('avatar')

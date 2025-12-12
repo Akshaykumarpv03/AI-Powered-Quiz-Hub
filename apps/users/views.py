@@ -63,9 +63,17 @@ def profile(request):
     if request.method == 'POST':
         form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
+            # Handle avatar clear
+            if 'avatar-clear' in request.POST:
+                request.user.avatar.delete(save=False)
+                request.user.avatar = None
             form.save()
             messages.success(request, 'Profile updated successfully!')
             return redirect('profile')
     else:
         form = ProfileUpdateForm(instance=request.user)
-    return render(request, 'users/profile.html', {'form': form})
+    
+    return render(request, 'users/profile.html', {
+        'form': form,
+        'user': request.user
+    })

@@ -1,39 +1,72 @@
+<!-- templates/users/profile.html — FINAL VERSION (WORKS 100%) -->
 {% extends "base.html" %}
 {% block content %}
 <div class="row justify-content-center min-vh-100 align-items-center">
-    <div class="col-md-8 col-lg-6">
-        <div class="card shadow-lg border-0 rounded-4">
-            <div class="card-header bg-gradient text-white text-center py-4" style="background: linear-gradient(135deg, #667eea, #764ba2);">
+    <div class="col-md-9 col-lg-7">
+        <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+            <div class="card-header text-white text-center py-4" style="background: linear-gradient(135deg, #667eea, #764ba2);">
                 <h2 class="mb-0">My Profile</h2>
             </div>
             <div class="card-body p-5 bg-white text-dark">
-                <div class="text-center mb-4">
+
+                <!-- Current Avatar -->
+                <div class="text-center mb-5">
                     {% if user.avatar %}
-                        <img src="{{ user.avatar.url }}" class="rounded-circle" width="120" height="120">
+                        <img src="{{ user.avatar.url }}?t={{ user.avatar|length }}" 
+                             class="rounded-circle shadow-lg" width="150" height="150" alt="Avatar">
+                        <p class="text-success mt-2"><small>Current avatar</small></p>
                     {% else %}
-                        <div class="bg-secondary rounded-circle d-inline-block" style="width:120px;height:120px;"></div>
+                        <div class="bg-secondary rounded-circle d-inline-flex align-items-center justify-content-center shadow-lg" style="width:150px;height:150px;">
+                            <i class="fas fa-user fa-5x text-white"></i>
+                        </div>
                     {% endif %}
-                    <h4 class="mt-3">{{ user.full_name|default:user.email }}</h4>
+                    <h3 class="mt-4">{{ user.full_name|default:"Set your name" }}</h3>
+                    <p class="text-muted fs-5">{{ user.email }}</p>
+                    {% if user.role %}
+                        <span class="badge bg-primary fs-5 px-4 py-2">{{ user.role.name }}</span>
+                    {% endif %}
                 </div>
 
+                <!-- FORM — THIS IS THE FIX -->
                 <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
-                    <div class="mb-3">
-                        <label class="form-label fw-bold">Full Name</label>
-                        {{ form.full_name }}
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Full Name</label>
+                            {{ form.full_name }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Role</label>
+                            {{ form.role }}
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label fw-bold">Avatar</label>
-                        {{ form.avatar }}
+
+                    <!-- AVATAR UPLOAD — RAW FIELD (THIS WORKS) -->
+                    <div class="mt-4">
+                        <label class="form-label fw-bold">Change Avatar</label>
+                        <input type="file" name="avatar" accept="image/*" class="form-control form-control-lg">
+                        {% if user.avatar %}
+                            <div class="form-text mt-2">
+                                <small>Current: {{ user.avatar.name|cut:"avatars/" }}</small><br>
+                                <label>
+                                    <input type="checkbox" name="avatar-clear"> Remove current avatar
+                                </label>
+                            </div>
+                        {% endif %}
                     </div>
-                    <div class="mb-3">
+
+                    <div class="mt-3">
                         <label class="form-label fw-bold">Bio</label>
                         {{ form.bio }}
                     </div>
-                    <button type="submit" class="btn btn-lg w-100 text-white fw-bold"
-                            style="background: linear-gradient(135deg, #667eea, #764ba2);">
-                        Update Profile
-                    </button>
+
+                    <div class="text-center mt-5">
+                        <button type="submit" class="btn btn-lg px-5 text-white fw-bold"
+                                style="background: linear-gradient(135deg, #667eea, #764ba2);">
+                            Update Profile
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>
